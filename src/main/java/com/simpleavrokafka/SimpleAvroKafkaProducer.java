@@ -1,4 +1,4 @@
-
+package com.simpleavrokafka;
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
@@ -15,9 +15,8 @@ import com.twitter.bijection.avro.GenericAvroCodecs;
 
 public class SimpleAvroKafkaProducer {
 
-
 	public static void main(String[] args) throws InterruptedException, IOException {
-		
+
 		File file = new File(args[0]);
 		Properties props = new Properties();
 		props.put("bootstrap.servers", args[1]);
