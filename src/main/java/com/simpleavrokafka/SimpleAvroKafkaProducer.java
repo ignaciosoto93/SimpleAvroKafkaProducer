@@ -25,7 +25,7 @@ public class SimpleAvroKafkaProducer {
 				defaultLoop = true;
 
 			do {
-				avroFile.sendEntireFile(args[2]);
+				avroFile.sendWholeFile(args[2]);
 				System.out.println("--------------------EOF---------------------\n");
 				Thread.sleep(15000);
 			} while (defaultLoop);
@@ -45,22 +45,5 @@ public class SimpleAvroKafkaProducer {
 		return props;
 	}
 
-//	private static void readCompleteAvroFile(String topicName, File file, Properties props) throws IOException {
-//		
-//		GenericDatumReader<GenericData.Record> datum = new GenericDatumReader<GenericData.Record>();
-//		DataFileReader<GenericData.Record> reader = new DataFileReader<GenericData.Record>(file, datum);
-//		Schema schema = reader.getSchema();
-//		GenericData.Record record = new GenericData.Record(schema);
-//		Injection<GenericRecord, byte[]> recordInjection = GenericAvroCodecs.toBinary(schema);
-//		KafkaProducer<String, byte[]> producer = new KafkaProducer<String, byte[]>(props);
-//		
-//		while (reader.hasNext()) {
-//			reader.next(record);
-//			byte[] bytes = recordInjection.apply(record);
-//			ProducerRecord<String, byte[]> theRecord = new ProducerRecord<String, byte[]>(topicName, bytes);
-//			producer.send(theRecord);
-//		}
-//		reader.close();
-//		producer.close();
-//	}
+
 }

@@ -21,9 +21,9 @@ public class AvroFileToTopic implements AvroFileToTopicInterface {
 	private File file;
 	private DataFileReader<GenericData.Record> reader;
 	private Schema schema;
-	GenericData.Record record;
-	Injection<GenericRecord, byte[]> recordInjection;
-	KafkaProducer<String, byte[]> producer;
+	private GenericData.Record record;
+	private Injection<GenericRecord, byte[]> recordInjection;
+	private KafkaProducer<String, byte[]> producer;
 
 	public AvroFileToTopic(File file, Properties props) throws IOException {
 		this.file=file;
@@ -91,7 +91,7 @@ public class AvroFileToTopic implements AvroFileToTopicInterface {
 		this.datum = datum;
 	}
 
-	public void sendEntireFile(String topicName) throws IOException {
+	public void sendWholeFile(String topicName) throws IOException {
 		this.reader = new DataFileReader<GenericData.Record>(file, datum);
 		while (reader.hasNext()) {
 			reader.next(record);
