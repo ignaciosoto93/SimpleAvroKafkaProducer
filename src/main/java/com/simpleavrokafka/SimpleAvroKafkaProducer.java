@@ -29,6 +29,7 @@ public class SimpleAvroKafkaProducer {
 				System.out.println("--------------------EOF---------------------\n");
 				Thread.sleep(15000);
 			} while (defaultLoop);
+			avroFile.getProducer().close();
 			System.out.println("EOF");
 
 		} catch (IOException e) {

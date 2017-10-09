@@ -100,7 +100,6 @@ public class AvroFileToTopic implements AvroFileToTopicInterface {
 			producer.send(theRecord);
 		}
 		reader.close();
-		producer.close();
 	}
 
 }
