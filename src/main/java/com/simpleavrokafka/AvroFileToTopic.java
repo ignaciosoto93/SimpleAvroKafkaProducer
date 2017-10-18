@@ -24,6 +24,8 @@ public class AvroFileToTopic implements AvroFileToTopicInterface {
 	private GenericData.Record record;
 	private Injection<GenericRecord, byte[]> recordInjection;
 	private KafkaProducer<String, byte[]> producer;
+	private int rowsPerSecond;
+	
 
 	public AvroFileToTopic(File file, Properties props) throws IOException {
 		this.file=file;
@@ -33,6 +35,7 @@ public class AvroFileToTopic implements AvroFileToTopicInterface {
 		this.record = new GenericData.Record(schema);
 		this.recordInjection = GenericAvroCodecs.toBinary(schema);
 		this.producer = new KafkaProducer<String, byte[]>(props);
+		this.rowsPerSecond = 250;
 	}
 
 	public File getFile() {
@@ -91,15 +94,30 @@ public class AvroFileToTopic implements AvroFileToTopicInterface {
 		this.datum = datum;
 	}
 
-	public void sendWholeFile(String topicName) throws IOException {
+	public void sendWholeFile(String topicName) throws IOException, InterruptedException {
 		this.reader = new DataFileReader<GenericData.Record>(file, datum);
+		
+		
+		
 		while (reader.hasNext()) {
-			reader.next(record);
-			byte[] bytes = recordInjection.apply(record);
-			ProducerRecord<String, byte[]> theRecord = new ProducerRecord<String, byte[]>(topicName, bytes);
-			producer.send(theRecord);
+			for (int i = 0; i < this.rowsPerSecond; i++) {
+				reader.next(record);
+				byte[] bytes = recordInjection.apply(record);
+				ProducerRecord<String, byte[]> theRecord = new ProducerRecord<String, byte[]>(topicName, bytes);
+				producer.send(theRecord);
+				
+			}
+			Thread.sleep(1000);
 		}
 		reader.close();
+	}
+
+	public int getRowsPerSecond() {
+		return rowsPerSecond;
+	}
+
+	public void setRowsPerSecond(int rowsPerSecond) {
+		this.rowsPerSecond = rowsPerSecond;
 	}
 
 }

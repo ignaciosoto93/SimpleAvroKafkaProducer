@@ -4,5 +4,5 @@ import java.io.IOException;
 
 public interface AvroFileToTopicInterface {
 	
-	void sendWholeFile(String topicName) throws IOException;
+	void sendWholeFile(String topicName) throws IOException, InterruptedException;
 }
